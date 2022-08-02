@@ -20,20 +20,33 @@ class Habilidades(Resource):
 class Habilidades_id(Resource):
     # tratar erro
     def get(self, id):
-        list = list_habilidades['habilidade']
-        select_habilidades = list[id]
-        return select_habilidades
+        try:
+            list = list_habilidades['habilidade']
+            select_habilidades = list[id]
+            mensagem = f'Habilidade {select_habilidades} encontrada'
+            response = {'status': 'Sucesso', 'mensagem': mensagem}
+
+        except IndexError:
+            mensagem = f'Habilidade não existe'
+            response = {'status': 'Erro', 'mensagem': mensagem}
+
+        except Exception:
+            mensagem = 'Erro não foi possivel excluir. Porcure o adiministrador da API'
+            response = {'status': 'Erro', 'mensagem': mensagem}
+
+        return response
 
     # tratar erro
     def put(self, id):
         dados = json.loads(request.data)
         list = list_habilidades['habilidade']
+        old_habilidade = list[id]
         list[id] = dados['habilidade']
-        return list
-
+        mensagem = f'Habilidade {old_habilidade} foi atualizada para {list[id]}'
+        response = {'status': 'Sucesso', 'mensagem': mensagem}
+        return response
 
     def delete(self, id):
         list = list_habilidades['habilidade']
         list.pop(id)
         return list
-

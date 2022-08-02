@@ -1,11 +1,10 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
+from habilidades import Habilidades, Habilidades_id
 import json
-
 
 app = Flask(__name__)
 api = Api(app)
-
 
 desenvolvedores = [
     {'id': 0, 'nome': 'Hercules', 'Habilidades': ['Python', 'Machine Learning', 'Flask', 'Rest API', 'Ciencia de dados']},
@@ -35,18 +34,17 @@ class Desenvolvedor(Resource):
         try:
             desenvolvedores.pop(id)
             mensagem = 'Registro excluido'
-            response= {'Status': 'Sucesso', 'Menssagem': mensagem}
+            response = {'Status': 'Sucesso', 'Menssagem': mensagem}
 
         except IndexError:
             mensagem = 'Não é possivel excluir um desenvolvedor que não existe'
             response = {'Status': 'Erro', 'Menssagem': mensagem}
 
         except Exception:
-            mensagem = 'Erro não foi possivel escluir. Porcure o adiministrador da API'
+            mensagem = 'Erro não foi possivel excluir. Porcure o adiministrador da API'
             response = {'status': 'Erro', 'mensagem': mensagem}
 
         return response
-
 
 
 # Lista todos os desenvolvedores e permite registrar um novo desenvolvedor
@@ -64,7 +62,8 @@ class list_desenvolvedores(Resource):
 
 api.add_resource(Desenvolvedor, '/dev/<int:id>/')
 api.add_resource(list_desenvolvedores, '/dev/')
-
+api.add_resource(Habilidades, '/habilidades/')
+api.add_resource(Habilidades_id, '/habilidades/<int:id>/')
 
 if __name__ == '__main__':
     app.run(debug=True)
